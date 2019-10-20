@@ -1,7 +1,7 @@
 import numpy
 import scipy
 import random
-import find_roots
+import find_roots_interval
 
 def generate_random_polynomials(min_degree, max_degree, quantity, mu, sigma):
     random_polynomials = []
@@ -33,7 +33,7 @@ def generate_random_polynomials(min_degree, max_degree, quantity, mu, sigma):
         
 
 p = numpy.poly1d([1, 8, -4, -2])
-itv = find_roots.budan_fourier(p)
+itv = find_roots_interval.budan_fourier(p)
 print(itv)
 
 
