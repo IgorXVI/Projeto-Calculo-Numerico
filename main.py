@@ -32,8 +32,12 @@ def generate_random_polynomials(min_degree, max_degree, quantity, mu, sigma):
     return random_polynomials
 
 p = numpy.poly1d([1, 3, 0, -1])
+
 x, itr = methods.bissecao(p, 0.000000001)
-print(x, itr)
+print("bissecao:", x, itr, end="\n\n")
+
+x, itr = methods.newton(p, 0.000000001)
+print("newton:", x, itr, end="\n\n")
 
 
 
