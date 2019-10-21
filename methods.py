@@ -1,16 +1,19 @@
 import find_roots_interval
 
-def bissecao(polynomial, E):
-    a, b = find_roots_interval.budan_fourier(polynomial)
+def bisection(polynomial, E):
+    a, r_neg, r_pos, b = find_roots_interval.find_roots_circle(polynomial)
 
     x = 0.0
     itr = 0
 
-    while abs((b - a)/2) > E:
+    while abs((b - a)/2.0) > E:
+        x = (a + b)/2.0
 
-        x = (a + b)/2
+        pA = polynomial.__call__(a)
+        pX = polynomial.__call__(x)
+        calc = pA * pX
 
-        if polynomial.__call__(a) * polynomial.__call__(x) < 0:
+        if calc < 0:
             b = x
         else:
             a = x
@@ -43,6 +46,20 @@ def newton(polynomial, E):
     while abs(x1 - x0) > E:
         x0 = x1
         x1 = fxp1(x0)
+        itr += 1
+    
+    return x1, itr
+
+def secant(polynomial, E):
+    x0, x1 = find_roots_interval.budan_fourier(polynomial)
+
+    fxp1 = lambda x0, x1: (x0 * polynomial.__call__(x1) - x1 * polynomial.__call__(x0))/(polynomial.__call__(x1) - polynomial.__call__(x0)) 
+    itr = 0
+
+    while abs(x1 - x0) > E:
+        buff = x1
+        x1 = fxp1(x0, x1)
+        x0 = buff
         itr += 1
     
     return x1, itr

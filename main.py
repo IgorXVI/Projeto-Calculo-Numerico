@@ -31,13 +31,16 @@ def generate_random_polynomials(min_degree, max_degree, quantity, mu, sigma):
     print("total quantity of generated polynomials: %i" % (len(random_polynomials)))
     return random_polynomials
 
-p = numpy.poly1d([1, 3, 0, -1])
+p = numpy.poly1d([1, -5, 17, 21])
 
-x, itr = methods.bissecao(p, 0.000000001)
-print("bissecao:", x, itr, end="\n\n")
+x, itr = methods.bisection(p, 0.0000000001)
+print("bisection:", x, itr, end="\n\n")
 
-x, itr = methods.newton(p, 0.000000001)
+x, itr = methods.newton(p, 0.0000000001)
 print("newton:", x, itr, end="\n\n")
+
+x, itr = methods.secant(p, 0.0000000001)
+print("secant:", x, itr, end="\n\n")
 
 
 
