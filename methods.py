@@ -1,37 +1,33 @@
 import find_roots_interval
 
-def bisection(polynomial, E):
-    a, r_neg, r_pos, b = find_roots_interval.find_roots_circle(polynomial)
+def bisection(p, E):
+    a, r1, r2, b = find_roots_interval.find_roots_circle(p)
 
-    x = 0.0
     itr = 0
 
-    while abs((b - a)/2.0) > E:
-        x = (a + b)/2.0
-
-        pA = polynomial.__call__(a)
-        pX = polynomial.__call__(x)
-        calc = pA * pX
-
-        if calc < 0:
+    x = (a + b)/2.0
+    while abs(p.__call__(x)) > E:
+        if itr == 500:
+            return None, None
+        elif p.__call__(a) * p.__call__(x) < 0:
             b = x
-        else:
+        elif p.__call__(b) * p.__call__(x) < 0:
             a = x
-
+            
         itr += 1
+        x = (a + b)/2.0
     
     return x, itr
 
-def newton(polynomial, E):
-    a, b = find_roots_interval.budan_fourier(polynomial)
+def newton(p, E):
+    a, r1, r2, b = find_roots_interval.find_roots_circle(p)
 
-    pd1 = polynomial.deriv(1)
-    pd2 = polynomial.deriv(2)
+    pd1 = p.deriv(1)
+    pd2 = p.deriv(2)
 
     x0 = None
-
-    calcA = polynomial.__call__(a) * pd2.__call__(a)
-    calcB = polynomial.__call__(b) * pd2.__call__(b)
+    calcA = p.__call__(a) * pd2.__call__(a)
+    calcB = p.__call__(b) * pd2.__call__(b)
     if calcA > 0:
         x0 = a
     elif calcB > 0:
@@ -39,27 +35,41 @@ def newton(polynomial, E):
     else:
         return None, None
 
-    fxp1 = lambda x: x - polynomial.__call__(x)/pd1.__call__(x)
     itr = 0
+    x1 = x0 - p.__call__(x0)/pd1.__call__(x0)
+    while abs(p.__call__(x1)) > E:
+        if pd1.__call__(x0) == 0 or itr == 500:
+            return None, None
 
-    x1 = fxp1(x0)
-    while abs(x1 - x0) > E:
         x0 = x1
-        x1 = fxp1(x0)
+        x1 = x0 - p.__call__(x0)/pd1.__call__(x0)
         itr += 1
-    
+
     return x1, itr
 
-def secant(polynomial, E):
-    x0, x1 = find_roots_interval.budan_fourier(polynomial)
+def secant(p, E):
+    a, r1, r2, b = find_roots_interval.find_roots_circle(p)
 
-    fxp1 = lambda x0, x1: (x0 * polynomial.__call__(x1) - x1 * polynomial.__call__(x0))/(polynomial.__call__(x1) - polynomial.__call__(x0)) 
     itr = 0
+    x0 = a
+    x1 = b
 
-    while abs(x1 - x0) > E:
+    if p.__call__(x1) - p.__call__(x0) == 0:
+        return None, None
+
+    m_n = x1 - ( (x1 - x0) / (p.__call__(x1) - p.__call__(x0)) ) * p.__call__(x1)
+    while abs(p.__call__(m_n)) > E:
+        if itr == 500:
+            return None, None
+
         buff = x1
-        x1 = fxp1(x0, x1)
+        x1 = m_n
         x0 = buff
+
+        if p.__call__(x1) - p.__call__(x0) == 0:
+            return None, None
+
+        m_n = x1 - ( (x1 - x0) / (p.__call__(x1) - p.__call__(x0)) ) * p.__call__(x1)
         itr += 1
-    
-    return x1, itr
+
+    return m_n, itr
