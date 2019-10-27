@@ -1,15 +1,43 @@
 def find_roots_circle(polynomial):
+    '''
+    polynomial: polinômio unidimensional
+    '''
+
+    # aqui é feita uma cópia do array contendo os
+    # coeficientes do polinômio
     cAbs = polynomial.c.copy()
+    # aqui cada um dos coeficientes é convertido
+    # para o seu valor em módulo
     cAbs = [abs(c) for c in cAbs]
 
+    # aqui é feita uma cópia do array de coeficientes 
+    # em módulo
     cA = cAbs.copy()
+    # aqui é removido o primeiro elemento do array de 
+    # coeficientes em módulo 
     cA.pop(0)
+    # aqui o maior valor do array de coeficientes em
+    # módulo sem o primeiro elemento é salvo na 
+    # variável "A"
     A = max(cA)
+    # aqui é feito o cálculo do "R" conforme 
+    # visto em aula, cAbs[0] é o primeiro elemento
+    # do array de coeficientes em módulo
     R = 1 + A/cAbs[0]
 
+    # aqui é feita uma cópia do array de coeficientes 
+    # em módulo
     cB = cAbs.copy()
+    # aqui é removido o último elemento do array de 
+    # coeficientes em módulo 
     cB.pop()
+    # aqui o maior valor do array de coeficientes em
+    # módulo sem o último elemento é salvo na 
+    # variável "B"
     B = max(cB)
+    # aqui é feito o cálculo do "r" conforme 
+    # visto em aula, cAbs[-1] é o último elemento 
+    # do array de coeficientes em módulo
     r = 1/(1 + (B/cAbs[-1]))
 
     return -R, -r, r, R

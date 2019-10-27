@@ -7,18 +7,38 @@ from timeit import time
 import json
 
 def generate_random_polynomials(quantity, mu, sigma, minGrau, maxGrau):
+    
+    '''
+    quantity: quantidade de polinômios a serem gerados para cada um dos graus
+    mu: mu da função gauss
+    sigma: sigma da função gayss
+    minGrau: grau mínimo
+    maxGrau: grau máximo
+    '''
+    
+    # array a ser retornado
     random_polynomials = []
 
+    # loop que gera todos os polinomios
     for j in range(1, quantity + 1):
+        # array de coeficientes
         buff = [] 
 
+        # aqui os graus aleátorios são gerados, o loop abaixo tem um 
+        # número de iteração igual ao número do grau
         for k in range(random.randint(minGrau + 1, maxGrau + 1)):
+            # aqui um coeficiente aleatório é gerado e adicionado ao array 
+            # de coeficientes
             buff.append(random.gauss(mu, sigma))
-            
+        
+        # aqui a função poly1d gera um polinômio com base no array de
+        # coeficientes
         polynomial = numpy.poly1d(buff)
 
+        # polinômio é adicionado ao array que vai ser retornado
         random_polynomials.append(polynomial)
 
+    # array é retornado
     return random_polynomials
 
 def gerar_resultados(minGrau, maxGrau, quantidade, MU, SIGMA, ERROR):
