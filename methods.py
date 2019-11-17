@@ -14,18 +14,25 @@ def bisection(p, E):
     # aqui eu aplico o método de bisseção conforme visto em aula
     x = (a + b)/2.0
     # p.__call__(x) é equivalente à f(x)
-    while abs(p.__call__(x)) > E:
+    fx = p.__call__(x)
+    fa = p.__call__(a)
+    fb = p.__call__(b)
+    while abs(fx) > E:
         if itr == 500:
             # se o número de iterações for igual à 500 
             # significa que o método não converge para o intervalo
             return None, None
-        elif p.__call__(a) * p.__call__(x) < 0:
+        elif fa * fx < 0:
             b = x
-        elif p.__call__(b) * p.__call__(x) < 0:
+        elif fb * fx < 0:
             a = x
             
         itr += 1
         x = (a + b)/2.0
+
+        fx = p.__call__(x)
+        fa = p.__call__(a)
+        fb = p.__call__(b)
     
     # retorna a raíz da função e o número de iterações
     return x, itr
@@ -62,16 +69,20 @@ def newton(p, E):
     # calculo do método de newton conforme visto em aula
     itr = 0
     # pd1.__call__(x) é equivalente à f'(x)
-    x1 = x0 - p.__call__(x0)/pd1.__call__(x0)
+    f1x0 = pd1.__call__(x0)
+    x1 = x0 - p.__call__(x0)/f1x0
     while abs(p.__call__(x1)) > E:
-        if pd1.__call__(x0) == 0 or itr == 500:
+
+        if f1x0 == 0 or itr == 500:
             # se o número de iterações for igual a 500
             # ou se o f(x0) for igual a 0
             # significa que o método não converge para o intervalo
             return None, None
 
+
         x0 = x1
-        x1 = x0 - p.__call__(x0)/pd1.__call__(x0)
+        f1x0 = pd1.__call__(x0)
+        x1 = x0 - p.__call__(x0)/f1x0
         itr += 1
 
     # retorna a raíz da função e o número de iterações
@@ -96,7 +107,9 @@ def secant(p, E):
 
     # aqui eu aplico o método das secantes conforme visto em aula 
     # com m_n sendo o último x da tabela
-    m_n = x1 - ( (x1 - x0) / (p.__call__(x1) - p.__call__(x0)) ) * p.__call__(x1)
+    fx1 = p.__call__(x1)
+    fx0 = p.__call__(x0)
+    m_n = x1 - ( (x1 - x0) / ( fx1 - fx0 ) ) * fx1
     while abs(p.__call__(m_n)) > E:
         if itr == 500:
             # se o número de iterações for igual à 500 
@@ -109,12 +122,15 @@ def secant(p, E):
         buff = x1
         x1 = m_n
         x0 = buff
+
+        fx1 = p.__call__(x1)
+        fx0 = p.__call__(x0)
         
-        if p.__call__(x1) - p.__call__(x0) == 0:
+        if fx1 - fx0 == 0:
             # se f(x1) - f(x0) for igual a 0 significa que o método não converge
             return None, None
 
-        m_n = x1 - ( (x1 - x0) / (p.__call__(x1) - p.__call__(x0)) ) * p.__call__(x1)
+        m_n = x1 - ( (x1 - x0) / ( fx1 - fx0 ) ) * fx1
         itr += 1
 
     # retorna a raíz da função e o número de iterações
