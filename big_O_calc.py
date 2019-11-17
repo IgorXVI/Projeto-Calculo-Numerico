@@ -26,7 +26,7 @@ def secant(fun, x0, x1, E):
 
 def big_O_calc(n_seg):
     res1 = n_seg
-    res2 = secant(lambda x: x*log2(x)-n_seg, 0.00000001, n_seg, 0.00000001)
+    res2 = secant(lambda x: x*log2(x)-n_seg, 2.2250738585072014e-308, n_seg, 0.00000001)
     res3 = sqrt(n_seg)
     res4 = log2(n_seg)
 
@@ -40,7 +40,7 @@ while True:
     res1, res2, res3, res4 = big_O_calc(n_seg)
     res1_b, res2_b, res3_b, res4_b = big_O_calc(n_seg_b)
 
-    table = PrettyTable(["complexidade", "max n/s A", "max n/s B", "B/A"])
+    table = PrettyTable(["complexidade", "max entrada em 1s A", "max entrada em 1s B", "B/A"])
     table.add_row(["n", res1, res1_b, res1_b/res1])
     table.add_row(["n*log2(n)", res2, res2_b, res2_b/res2])
     table.add_row(["n^2", res3, res3_b, res3_b/res3])
